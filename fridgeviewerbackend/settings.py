@@ -25,7 +25,9 @@ SECRET_KEY = 'django-insecure-9ki#e3qte$!a44a1vr_!*%4+p)&q-!nav--@*ew309(id*md6h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+
+]
 
 
 # Application definition
@@ -122,3 +124,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'fridgeviewerbackend.utils.custom_exception_handler'
+}

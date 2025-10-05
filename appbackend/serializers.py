@@ -1,8 +1,25 @@
-from appbackend.models import User
+from appbackend.models import User, Category, Product
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['name', 'email', 'password']
-        
+        fields = ['id', 'name', 'email', 'password']
+        validators = [UniqueTogetherValidator(queryset=User.objects.all(), fields=['email'])]
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
+        validators = [UniqueTogetherValidator(queryset=Category.objects.all(), fields=['name'])]
+     
+                
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'category_id', 'user_id', 'purchase_date', 'expiry_date']
+        validators = [UniqueTogetherValidator(queryset=Product.objects.all(), fields=['name'])]
+                               
