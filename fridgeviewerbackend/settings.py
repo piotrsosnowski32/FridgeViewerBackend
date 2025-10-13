@@ -26,8 +26,7 @@ SECRET_KEY = 'django-insecure-9ki#e3qte$!a44a1vr_!*%4+p)&q-!nav--@*ew309(id*md6h
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'http://localhost:3000',
-    '127.0.0.1',
+    '*',
 ]
 
 
@@ -46,14 +45,14 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'fridgeviewerbackend.urls'
@@ -133,17 +132,4 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'fridgeviewerbackend.utils.custom_exception_handler'
 }
 
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:3000',
-    'http://localhost:3000'
-]
-
-CORS_ALLOW_HEADERS = [
-    "accept",
-    "authorization",
-    "content-type",
-    "user-agent",
-    "x-csrftoken",
-    "x-requested-with",
-]
+CORS_ALLOW_ALL_ORIGINS = True
