@@ -1,14 +1,18 @@
 from django.db import models
 from datetime import date
 
+class Fridge(models.Model):
+    name = models.CharField(max_length=255)
+
 
 class User(models.Model):
     name = models.CharField(max_length=255)
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
+    fridge_id = models.ForeignKey(Fridge, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.name} {self.email}"
+        return f"{self.name} | {self.email} | {self.fridge_id.name}"
 
 
 class Category(models.Model):

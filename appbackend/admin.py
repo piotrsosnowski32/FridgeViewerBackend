@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Category, Product
+from .models import User, Category, Product, Fridge
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
@@ -15,6 +15,12 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    list_display = ('pk', "__str__",)
+    readonly_fields = ('id',)
+
+
+@admin.register(Fridge)
+class FridgeAdmin(admin.ModelAdmin):
     list_display = ('pk', "__str__",)
     readonly_fields = ('id',)
 
