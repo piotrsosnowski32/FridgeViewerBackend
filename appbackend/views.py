@@ -54,11 +54,12 @@ class Categories(APIView):
     
 class Products(APIView): 
     def get(self, request, id: int = None):
-        if id == None:     
-            products = [product for product in models.Product.objects.all()]
+
+        if id == None:
+            products = [product for product in models.Product.objects.filter(is_active=True).order_by('expiry_date')]
         else: 
-            products = models.Category.objects.filter(id=id)
-            
+            products = models.Product.objects.filter(id=id)
+
         product_serializer = serializers.ProductSerializer(products, many=True)
         return Response(product_serializer.data)
 

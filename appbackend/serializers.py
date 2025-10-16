@@ -20,6 +20,6 @@ class CategorySerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'category_id', 'user_id', 'purchase_date', 'expiry_date']
+        fields = '__all__'
         validators = [UniqueTogetherValidator(queryset=Product.objects.all(), fields=['name'])]
                                
