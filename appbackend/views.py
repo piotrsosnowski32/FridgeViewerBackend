@@ -71,4 +71,14 @@ class Products(APIView):
             return Response(product_serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id: int = None):
+
+        if id == None:
+            return Response({'test': 'test'})
+        else:
+            product = models.Product.objects.filter(id=id)
+            product.delete()
+
+        return Response({'deleted':id})
         
