@@ -54,7 +54,6 @@ class Categories(APIView):
     
 class Products(APIView): 
     def get(self, request, id: int = None):
-
         if id == None:
             products = [product for product in models.Product.objects.filter(is_active=True).order_by('expiry_date')]
         else: 
@@ -72,13 +71,16 @@ class Products(APIView):
 
         return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, id: int = None):
-
+    def patch(self, request, id: int = None):
         if id == None:
             return Response({'test': 'test'})
         else:
-            product = models.Product.objects.filter(id=id)
-            product.delete()
+            product = models.Product.objects.filter(id=id)[0]
+            product.is_active = False
+            product_serializer = serializers.ProductSerializer(product, data=request.data, partial=True)
+
+            if product_serializer.is_valid():
+                product_serializer.save()
 
         return Response({'deleted':id})
         
