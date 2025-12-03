@@ -3,3 +3,5 @@ env
 db*
 sql*
 fridgeviewerbackend/settings.py
+tests/*
+!tests/test*

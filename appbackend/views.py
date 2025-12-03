@@ -13,6 +13,10 @@ def test(request):
     return HttpResponse("Hi")
 
 class Users(APIView):
+    """
+    Request users from database.
+    Post users data to database.
+    """
     def get(self, request, id: int = None):
         if id == None:     
             users = [user for user in models.User.objects.all()]
