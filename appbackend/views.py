@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from rest_framework import exceptions
 from rest_framework import status
 from typing import Dict
 from . import serializers
@@ -18,13 +19,21 @@ class Users(APIView):
     Post users data to database.
     """
     def get(self, request, id: int = None):
-        if id == None:     
-            users = [user for user in models.User.objects.all()]
-        else: 
-            users = models.User.objects.filter(id=id)
+        try:
+            if not isinstance(id, int):
+                raise TypeError
+
+            if id == None:     
+                users = [user for user in models.User.objects.all()]
+            else: 
+                users = models.User.objects.filter(id=id)
+                
+            user_serializer = serializers.UserSerializer(users, many=True)
             
-        user_serializer = serializers.UserSerializer(users, many=True)
-        return Response(user_serializer.data)
+            return Response(user_serializer.data)
+    
+        except Exception as e:
+            return Response(e)
 
     def post(self, request):
         user_serializer = serializers.UserSerializer(data=request.data)
@@ -86,5 +95,5 @@ class Products(APIView):
             if product_serializer.is_valid():
                 product_serializer.save()
 
-        return Response({'deleted':id})
+        return Response({'  d':id})
         

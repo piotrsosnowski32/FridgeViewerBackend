@@ -5,3 +5,4 @@ sql*
 fridgeviewerbackend/settings.py
 tests/*
 !tests/test*
+.github
