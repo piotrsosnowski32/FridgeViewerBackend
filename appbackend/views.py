@@ -10,50 +10,55 @@ from . import serializers
 from . import models
 
 
-def test(request):
-    return HttpResponse("Hi")
-
 class Users(APIView):
     """
     Request users from database.
     Post users data to database.
     """
     def get(self, request, id: int = None):
-        try:
-            if not isinstance(id, int):
-                raise TypeError
+        if not id:
+            users = [user for user in models.User.objects.all()]
+        else:
+            users = models.User.objects.filter(id=id)
 
-            if id == None:     
-                users = [user for user in models.User.objects.all()]
-            else: 
-                users = models.User.objects.filter(id=id)
-                
-            user_serializer = serializers.UserSerializer(users, many=True)
-            
-            return Response(user_serializer.data)
-    
-        except Exception as e:
-            return Response(e)
+        user_serializer = serializers.UserSerializer(users, many=True)
+
+        return Response(user_serializer.data, status=status.HTTP_200_OK)
+
 
     def post(self, request):
         user_serializer = serializers.UserSerializer(data=request.data)
-        
+
         if user_serializer.is_valid():
             user_serializer.save()
             return Response(user_serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, id: int = None):
+        if not id:
+            return Response({'message': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            user = models.User.objects.filter(id=id)[0]
+            user.is_active = False
+            user_serializer = serializers.UserSerializer(user, data=request.data, partial=True)
+
+            if user_serializer.is_valid():
+                user_serializer.save()
+
+        return Response({'message': 'User updated successfully.'}, status=status.HTTP_201_CREATED)
     
     
 class Categories(APIView): 
     def get(self, request, id: int = None):
-        if id == None:     
+        if not id:
             categories = [category for category in models.Category.objects.all()]
         else: 
             categories = models.Category.objects.filter(id=id)
             
         category_serializer = serializers.CategorySerializer(categories, many=True)
-        return Response(category_serializer.data)
+
+        return Response(category_serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         category_serializer = serializers.CategorySerializer(data=request.data)
@@ -63,17 +68,29 @@ class Categories(APIView):
             return Response(category_serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(category_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+    def patch(self, request, id: int = None):
+        if not id:
+            return Response({'message': 'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        else:
+            category = models.Category.objects.filter(id=id)[0]
+            category.is_active = False
+            category_serializer = serializers.CategorySerializer(category, data=request.data, partial=True)
+
+            if category_serializer.is_valid():
+                category_serializer.save()
+
+        return Response({'message': 'Category updated successfully.'}, status=status.HTTP_201_CREATED)
     
 class Products(APIView): 
     def get(self, request, id: int = None):
-        if id == None:
+        if not id:
             products = [product for product in models.Product.objects.filter(is_active=True).order_by('expiry_date')]
         else: 
             products = models.Product.objects.filter(id=id)
 
         product_serializer = serializers.ProductSerializer(products, many=True)
-        return Response(product_serializer.data)
+        return Response(product_serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         product_serializer = serializers.ProductSerializer(data=request.data)
@@ -85,8 +102,8 @@ class Products(APIView):
         return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, id: int = None):
-        if id == None:
-            return Response({'test': 'test'})
+        if not id:
+            return Response({'message':'User does not exist.'}, status=status.HTTP_404_NOT_FOUND)
         else:
             product = models.Product.objects.filter(id=id)[0]
             product.is_active = False
@@ -95,5 +112,5 @@ class Products(APIView):
             if product_serializer.is_valid():
                 product_serializer.save()
 
-        return Response({'  d':id})
+        return Response({'message':'User updated successfully.'}, status=status.HTTP_201_CREATED)
         
